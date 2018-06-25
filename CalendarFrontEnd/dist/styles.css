@@ -1,0 +1,71 @@
+body {
+  font-family: "Kanit", sans-serif;
+  background-color: black;
+  color: white;
+}
+
+/* STYLING FOR BUTTONS */
+button {
+  background-color: #5ac758;
+  color: white;
+}
+
+.container {
+  width: 80%;
+  margin: auto;
+}
+
+/* STYLING FOR MONTH CALENDAR */
+.container-month {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+}
+
+/* STYLING FOR EACH DAY */
+.day-item {
+  border: 2px solid white;
+  background-color: rgb(88, 88, 88);
+  font-size: 1.5rem;
+  height: 8rem;
+}
+.blank-day-item {
+  border: 2px solid white;
+  height: 8rem;
+}
+
+/* STYLING FOR WEEKDAY HEADER(SUNDAY, MONDAY, ETC) */
+.header-week-container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 1fr;
+}
+
+.weekday-item {
+  border: 2px solid white;
+  background-color: #6ae368;
+  text-align: center;
+}
+
+/* CALENDAR HEADER STYLING */
+.calendar-header-container {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.calendar-header-button {
+  height: 40px;
+  font-size: 0.75rem;
+  width: auto;
+}
+
+.calendar-header-text {
+  font-size: 3.5rem;
+}
+
+/* STYLING FOR DAY HEADER - DAY VIEW */
+.header-day {
+  margin: 0 auto;
+}
