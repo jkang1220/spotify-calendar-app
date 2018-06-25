@@ -29,6 +29,7 @@ button {
   font-size: 1.5rem;
   height: 8rem;
 }
+
 .blank-day-item {
   border: 2px solid white;
   height: 8rem;
@@ -62,7 +63,7 @@ button {
 }
 
 .calendar-header-text {
-  font-size: 3.5rem;
+  font-size: 3rem;
 }
 
 /* STYLING FOR DAY HEADER - DAY VIEW */

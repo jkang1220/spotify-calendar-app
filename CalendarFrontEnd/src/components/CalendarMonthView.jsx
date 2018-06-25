@@ -5,15 +5,11 @@ import CalendarHeader from "./CalendarHeader.jsx";
 import Day from "./Day.jsx";
 
 function generateCalendar(props) {
+  console.log("props recieved in generateCalendar", props);
   let calendarArr = [];
-  let daysInMonth = moment()
-    .month(props.currMonth)
-    .year(props.currYear)
-    .daysInMonth();
+  let daysInMonth = moment(props.currentDate).daysInMonth();
 
-  let startOfMonth = moment()
-    .month(props.currMonth)
-    .year(props.currYear)
+  let startOfMonth = moment(props.currentDate)
     .startOf("month")
     .format("d");
 
@@ -42,13 +38,11 @@ class CalendarMonthView extends React.Component {
   render() {
     return (
       <div>
-        {/* <h1>CALENDAR MONTH VIEW</h1> */}
         <CalendarHeader
           view={this.props.view}
           nextMonth={this.props.nextMonth}
           previousMonth={this.props.previousMonth}
-          currYear={this.props.currYear}
-          currMonth={this.props.currMonth}
+          currentDate={this.props.currentDate}
         />
         <WeekDayHeader view={this.props.view} />
         <div className="container-month">

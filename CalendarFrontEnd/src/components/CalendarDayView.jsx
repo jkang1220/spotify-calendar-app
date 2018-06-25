@@ -6,29 +6,23 @@ import moment from "moment";
 import WeekDayHeader from "./WeekDayHeader.jsx";
 
 const CalendarDayView = props => {
-  let dayOfWeek = moment()
-    .date(props.currDay)
-    .month(props.currMonth)
-    .year(props.currYear)
-    .day();
+  let dayOfWeek = moment(props.currentDate).day();
+  let currDate = moment(props.currentDate).date();
 
   return (
     <div>
-      CALENDAR DAY VIEW
       <CalendarHeader
         view={props.view}
         nextDay={props.nextDay}
+        currentDate={props.currentDate}
         previousDay={props.previousDay}
-        currDay={props.currDay}
-        currMonth={props.currMonth}
-        currYear={props.currYear}
       />
       <WeekDayHeader
         view={props.view}
-        currDay={props.currDay}
+        currDay={props.currentDate}
         dayOfWeek={dayOfWeek}
       />
-      <Day day={props.currDay} />;
+      <Day day={currDate} />;
     </div>
   );
 };

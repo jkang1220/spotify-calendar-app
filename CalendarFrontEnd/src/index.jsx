@@ -13,14 +13,15 @@ import { MONTH_VIEW, WEEK_VIEW, DAY_VIEW } from "../../constants.js";
 class App extends React.Component {
   constructor(props) {
     super(props);
-    let today = new Date();
+    // let today = new Date();
     this.state = {
       events: [],
       view: MONTH_VIEW,
-      currMonth: today.getMonth(),
-      currDay: today.getDate(),
-      currYear: today.getFullYear()
+      currentDate: moment().toDate()
     };
+    // currMonth: today.getMonth(),
+    // currDay: today.getDate(),
+    // currYear: today.getFullYear()
     this.updateView = this.updateView.bind(this);
     this.toggleAddModal = this.toggleAddModal.bind(this);
     this.nextMonth = this.nextMonth.bind(this);
@@ -62,69 +63,73 @@ class App extends React.Component {
   }
 
   nextMonth() {
-    let month = this.state.currMonth === 11 ? 0 : this.state.currMonth + 1;
-    let year =
-      this.state.currMonth === 11
-        ? this.state.currYear + 1
-        : this.state.currYear;
-    this.setState({ currMonth: month, currYear: year });
+    let currentDate = this.state.currentDate;
+    this.setState(prevstate => {
+      return {
+        currentDate: moment(prevstate.currentDate)
+          .add(1, "months")
+          .toDate()
+      };
+    });
   }
 
   previousMonth() {
-    let month = this.state.currMonth === 0 ? 11 : this.state.currMonth - 1;
-    let year =
-      this.state.currMonth === 0
-        ? this.state.currYear - 1
-        : this.state.currYear;
-    this.setState({ currMonth: month, currYear: year });
+    let currentDate = this.state.currentDate;
+    this.setState(prevstate => {
+      return {
+        currentDate: moment(prevstate.currentDate)
+          .subtract(1, "months")
+          .toDate()
+      };
+    });
   }
 
   nextWeek() {
-    let currDay = this.state.currDay;
-    let currYear = this.state.currYear;
-    let currMonth = this.state.currMonth;
-
-    for (var i = 0; i < 7; i++) {
-      this.nextDay();
-    }
+    let currentDate = this.state.currentDate;
+    this.setState(prevstate => {
+      return {
+        currentDate: moment(prevstate.currentDate)
+          .add(1, "weeks")
+          .toDate()
+      };
+    });
   }
 
   previousWeek() {
-    for (var i = 0; i < 7; i++) {
-      this.previousDay();
-    }
+    let currentDate = this.state.currentDate;
+    this.setState(prevstate => {
+      return {
+        currentDate: moment(prevstate.currentDate)
+          .subtract(1, "weeks")
+          .toDate()
+      };
+    });
   }
 
   nextDay() {
-    let numberOfDays = moment()
-      .month(this.state.currMonth)
-      .year(this.state.currYear)
-      .daysInMonth();
-
-    if (this.state.currDay === numberOfDays) {
-      this.nextMonth();
-      this.setState({ currDay: 1 });
-    } else {
-      let currDay = this.state.currDay + 1;
-      this.setState({ currDay });
-    }
+    let currentDate = this.state.currentDate;
+    this.setState(prevstate => {
+      return {
+        currentDate: moment(prevstate.currentDate)
+          .add(1, "days")
+          .toDate()
+      };
+    });
   }
 
   previousDay() {
-    let currDay = this.state.currDay;
-
-    if (currDay === 1) {
-      this.previousMonth();
-      let numberOfDays = moment()
-        .month(this.state.currMonth)
-        .year(this.state.currYear)
-        .daysInMonth();
-      this.setState({ currDay: numberOfDays });
-    } else {
-      this.setState({ currDay: currDay - 1 });
-    }
+    let currentDate = this.state.currentDate;
+    this.setState(prevstate => {
+      return {
+        currentDate: moment(prevstate.currentDate)
+          .subtract(1, "days")
+          .toDate()
+      };
+    });
   }
+
   render() {
+    console.log("APP WAS RE-RENDERED", this.state);
     return (
       <div className="container">
         <div>
@@ -137,8 +142,7 @@ class App extends React.Component {
         {this.state.view === MONTH_VIEW ? (
           <CalendarMonthView
             view={this.state.view}
-            currMonth={this.state.currMonth}
-            currYear={this.state.currYear}
+            currentDate={this.state.currentDate}
             nextMonth={this.nextMonth}
             previousMonth={this.previousMonth}
           />
@@ -146,20 +150,16 @@ class App extends React.Component {
         {this.state.view === WEEK_VIEW ? (
           <CalendarWeekView
             view={this.state.view}
-            currDay={this.state.currDay}
-            currMonth={this.state.currMonth}
-            currYear={this.state.currYear}
             nextWeek={this.nextWeek}
+            currentDate={this.state.currentDate}
             previousWeek={this.previousWeek}
           />
         ) : null}
         {this.state.view === DAY_VIEW ? (
           <CalendarDayView
             view={this.state.view}
-            currDay={this.state.currDay}
-            currMonth={this.state.currMonth}
-            currYear={this.state.currYear}
             nextDay={this.nextDay}
+            currentDate={this.state.currentDate}
             previousDay={this.previousDay}
           />
         ) : null}

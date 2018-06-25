@@ -6,49 +6,62 @@ import moment from "moment";
 
 function generateWeekCalendar(props) {
   let calendarArr = [];
-
-  let startOfWeek = moment()
-    .date(props.currDay)
-    .month(props.currMonth)
-    .year(props.currYear)
+  let daysInMonth = moment(props.currentDate).daysInMonth();
+  let startOfWeek = moment(props.currentDate)
     .startOf("week")
     .date();
-
-  let endOfWeek = moment()
-    .date(props.currDay)
-    .month(props.currMonth)
-    .year(props.currYear)
+  let startOfWeekDay = moment(props.currentDate)
+    .startOf("week")
+    .day();
+  let endOfWeek = moment(props.currentDate)
     .endOf("week")
     .date();
 
-  for (var i = startOfWeek; i <= endOfWeek; i++) {
-    calendarArr.push(i);
+  for (var i = 0; i < 7; i++) {
+    if (startOfWeek + i <= daysInMonth) {
+      calendarArr.push(startOfWeek + i);
+    }
   }
+  if (endOfWeek < startOfWeek) {
+    for (var x = 1; x <= endOfWeek; x++) {
+      calendarArr.push(x);
+    }
+  }
+
   return calendarArr;
 }
 
-const CalendarWeekView = props => {
-  let weekArr = generateWeekCalendar(props);
+class CalendarWeekView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      weekArr: generateWeekCalendar(this.props)
+    };
+  }
 
-  return (
-    <div>
-      CALENDAR WEEK VIEW
-      <CalendarHeader
-        view={props.view}
-        nextWeek={props.nextWeek}
-        previousWeek={props.previousWeek}
-        currDay={props.currDay}
-        currMonth={props.currMonth}
-        currYear={props.currYear}
-      />
-      <WeekDayHeader view={props.view} />
-      <div className="container-month">
-        {weekArr.map((day, i) => {
-          return <Day key={i} day={day} />;
-        })}
+  componentWillReceiveProps(nextProps) {
+    this.setState(prevState => {
+      return { weekArr: generateWeekCalendar(nextProps) };
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <CalendarHeader
+          view={this.props.view}
+          nextWeek={this.props.nextWeek}
+          previousWeek={this.props.previousWeek}
+          currentDate={this.props.currentDate}
+        />
+        <WeekDayHeader view={this.props.view} />
+        <div className="container-month">
+          {this.state.weekArr.map((day, i) => {
+            return <Day key={i} day={day} />;
+          })}
+        </div>
       </div>
-    </div>
-  );
-};
-
+    );
+  }
+}
 export default CalendarWeekView;
