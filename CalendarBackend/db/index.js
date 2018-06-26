@@ -1,10 +1,13 @@
 var mongoose = require("mongoose");
-// mongoose.connect(
-//   `mongodb://${process.env.DB_USERNAME}:${
-//     process.env.DB_PASSWORD
-//   }@ds117701.mlab.com:17701/spotify-calendar`
-// );
-mongoose.connect("mongodb://localhost/calendar");
+
+const connectionString =
+  process.env.DB_USERNAME !== undefined
+    ? `mongodb://${process.env.DB_USERNAME}:${
+        process.env.DB_PASSWORD
+      }@ds117701.mlab.com:17701/spotify-calendar`
+    : "mongodb://localhost/calendar";
+
+mongoose.connect(connectionString);
 
 var db = mongoose.connection;
 
