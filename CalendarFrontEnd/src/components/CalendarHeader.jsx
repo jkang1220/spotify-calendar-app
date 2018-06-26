@@ -57,65 +57,67 @@ class CalendarHeader extends React.Component {
   }
 
   render() {
-    if (this.props.view === MONTH_VIEW) {
+    let {
+      view,
+      previousMonth,
+      nextMonth,
+      previousWeek,
+      nextWeek,
+      previousDay,
+      nextDay,
+      currentDate
+    } = this.props;
+    let {
+      currentMonth,
+      currentYear,
+      weekStartMonth,
+      weekStartDate,
+      weekStartYear,
+      weekEndDate,
+      weekEndMonth,
+      weekEndYear
+    } = this.state;
+    if (view === MONTH_VIEW) {
       return (
         <div className="calendar-header-container">
-          <button
-            className="calendar-header-button"
-            onClick={this.props.previousMonth}
-          >
+          <button className="calendar-header-button" onClick={previousMonth}>
             Previous Month
           </button>
           <h2 className="calendar-header-text">{`${
-            MONTHS[this.state.currentMonth]
-          } ${this.state.currentYear}`}</h2>
-          <button
-            className="calendar-header-button"
-            onClick={this.props.nextMonth}
-          >
+            MONTHS[currentMonth]
+          } ${currentYear}`}</h2>
+          <button className="calendar-header-button" onClick={nextMonth}>
             Next Month
           </button>
         </div>
       );
-    } else if (this.props.view === WEEK_VIEW) {
+    } else if (view === WEEK_VIEW) {
       return (
         <div className="calendar-header-container">
-          <button
-            className="calendar-header-button"
-            onClick={this.props.previousWeek}
-          >
+          <button className="calendar-header-button" onClick={previousWeek}>
             Previous Week
           </button>
           <h2 className="calendar-header-text">{`${
-            MONTHS[this.state.weekStartMonth]
-          } ${this.state.weekStartDate}, ${this.state.weekStartYear} - ${
-            MONTHS[this.state.weekEndMonth]
-          } ${this.state.weekEndDate}, ${this.state.weekEndYear}`}</h2>
-          <button
-            className="calendar-header-button"
-            onClick={this.props.nextWeek}
-          >
+            MONTHS[weekStartMonth]
+          } ${weekStartDate}, ${weekStartYear} - ${
+            MONTHS[weekEndMonth]
+          } ${weekEndDate}, ${weekEndYear}`}</h2>
+          <button className="calendar-header-button" onClick={nextWeek}>
             Next Week
           </button>
         </div>
       );
-    } else if (this.props.view === DAY_VIEW) {
+    } else if (view === DAY_VIEW) {
       return (
         <div className="calendar-header-container">
-          <button
-            className="calendar-header-button"
-            onClick={this.props.previousDay}
-          >
+          <button className="calendar-header-button" onClick={previousDay}>
             Previous Day
           </button>
           <h2 className="calendar-header-text">{`${
-            MONTHS[this.state.currentMonth]
-          } ${moment(this.props.currentDate).date()},
-           ${this.state.currentYear}`}</h2>
-          <button
-            className="calendar-header-button"
-            onClick={this.props.nextDay}
-          >
+            MONTHS[currentMonth]
+          } ${moment(currentDate).date()},
+           ${currentYear}`}</h2>
+          <button className="calendar-header-button" onClick={nextDay}>
             Next Day
           </button>
         </div>

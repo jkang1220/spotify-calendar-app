@@ -4,89 +4,81 @@ import WeekDayHeader from "./WeekDayHeader.jsx";
 import Day from "./Day.jsx";
 import moment from "moment";
 
-function filterEventsByDay(events, currentMonth, currentDate, currentYear) {
-  return events.filter(events => {
-    let eventStartMonth = moment(events.start_date).month();
-    let eventStartYear = moment(events.start_date).year();
-    let eventStartDate = moment(events.start_date).date();
-    let eventEndMonth = moment(events.end_date).month();
-    let eventEndYear = moment(events.end_date).year();
-    let eventEndDate = moment(events.end_date).date();
-    return (
-      currentYear >= eventStartYear &&
-      currentYear <= eventEndYear &&
-      (currentMonth >= eventStartMonth && currentMonth <= eventStartMonth) &&
-      (currentDate >= eventStartDate && currentDate <= eventEndDate)
-    );
-  });
+function filterEventsByDay(events, date) {
+  return events.filter(
+    event =>
+      moment(event.start_date)
+        .startOf("day")
+        .isSameOrBefore(moment(date).endOf("day")) &&
+      moment(event.end_date)
+        .endOf("day")
+        .isSameOrAfter(moment(date).startOf("day"))
+  );
 }
 
-function generateWeekCalendar(props) {
-  let calendarArr = [];
-  let daysInMonth = moment(props.currentDate).daysInMonth();
-  let startOfWeek = moment(props.currentDate)
-    .startOf("week")
-    .date();
-  let startOfWeekDay = moment(props.currentDate)
-    .startOf("week")
-    .day();
-  let endOfWeek = moment(props.currentDate)
-    .endOf("week")
-    .date();
-
+function generateWeekCalendar(startDate) {
+  var dates = [];
   for (var i = 0; i < 7; i++) {
-    if (startOfWeek + i <= daysInMonth) {
-      calendarArr.push(startOfWeek + i);
-    }
+    let day = moment(startDate)
+      .add(i, "days")
+      .format();
+    dates.push(day);
   }
-  if (endOfWeek < startOfWeek) {
-    for (var x = 1; x <= endOfWeek; x++) {
-      calendarArr.push(x);
-    }
-  }
-
-  return calendarArr;
+  return dates;
 }
 
 class CalendarWeekView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      weekArr: generateWeekCalendar(this.props)
+      weekArr: generateWeekCalendar(
+        moment(this.props.currentDate).startOf("week"),
+        moment(this.props.currentDate).endOf("week")
+      )
     };
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState(prevState => {
-      return { weekArr: generateWeekCalendar(nextProps) };
+      return {
+        weekArr: generateWeekCalendar(
+          moment(nextProps.currentDate).startOf("week"),
+          moment(nextProps.currentDate).endOf("week")
+        )
+      };
     });
   }
 
   render() {
+    let {
+      events,
+      view,
+      nextWeek,
+      previousWeek,
+      currentDate,
+      handleEventClick,
+      handleDayClick
+    } = this.props;
+
     return (
       <div>
         <CalendarHeader
-          view={this.props.view}
-          nextWeek={this.props.nextWeek}
-          previousWeek={this.props.previousWeek}
-          currentDate={this.props.currentDate}
+          view={view}
+          nextWeek={nextWeek}
+          previousWeek={previousWeek}
+          currentDate={currentDate}
         />
-        <WeekDayHeader view={this.props.view} />
+        <WeekDayHeader view={view} />
         <div className="container-month">
-          {this.state.weekArr.map((day, i) => {
+          {this.state.weekArr.map((date, i) => {
             return (
               <Day
-                currentDate={this.props.currentDate}
-                handleEventClick={this.props.handleEventClick}
-                handleDayClick={this.props.handleDayClick}
-                events={filterEventsByDay(
-                  this.props.events,
-                  moment(this.props.currentDate).month(),
-                  day,
-                  moment(this.props.currentDate).year()
-                )}
+                currentDate={currentDate}
+                handleEventClick={handleEventClick}
+                handleDayClick={handleDayClick}
+                events={filterEventsByDay(events, date)}
                 key={i}
-                day={day}
+                day={date}
               />
             );
           })}

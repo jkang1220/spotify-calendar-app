@@ -1,14 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
+import moment from "moment";
 import AddEventModal from "./components/AddEventModal.jsx";
 import CalendarMonthView from "./components/CalendarMonthView.jsx";
 import CalendarWeekView from "./components/CalendarWeekView.jsx";
 import CalendarDayView from "./components/CalendarDayView.jsx";
 import ViewOptionRadial from "./components/ViewOptionRadial.jsx";
 import EditEventModal from "./components/EditEventModal.jsx";
-
-import moment from "moment";
 import { MONTH_VIEW, WEEK_VIEW, DAY_VIEW } from "../../constants.js";
 
 class App extends React.Component {
@@ -56,9 +55,7 @@ class App extends React.Component {
     axios
       .get("/events")
       .then(res => {
-        this.setState({ events: res.data }, () => {
-          console.log("successfully fetched events", res.data);
-        });
+        this.setState({ events: res.data });
       })
       .catch(err => {
         console.error("Error occured while fetching events", err);
@@ -171,58 +168,65 @@ class App extends React.Component {
   }
 
   render() {
+    let {
+      view,
+      currentDate,
+      events,
+      editEvent,
+      selectedDate,
+      showAddModal,
+      showEditModal
+    } = this.state;
+
     return (
       <div className="container">
         <div>
           <h1>Jimmy's Spotify Calendar</h1>
-          <ViewOptionRadial
-            view={this.state.view}
-            updateView={this.updateView}
-          />
+          <ViewOptionRadial view={view} updateView={this.updateView} />
         </div>
-        {this.state.view === MONTH_VIEW ? (
+        {view === MONTH_VIEW ? (
           <CalendarMonthView
-            view={this.state.view}
-            currentDate={this.state.currentDate}
+            view={view}
+            currentDate={currentDate}
             nextMonth={this.nextMonth}
             previousMonth={this.previousMonth}
             handleDayClick={this.handleDayClick}
             handleEventClick={this.handleEventClick}
-            events={this.state.events}
+            events={events}
           />
         ) : null}
-        {this.state.view === WEEK_VIEW ? (
+        {view === WEEK_VIEW ? (
           <CalendarWeekView
-            view={this.state.view}
+            view={view}
             nextWeek={this.nextWeek}
-            currentDate={this.state.currentDate}
+            currentDate={currentDate}
             previousWeek={this.previousWeek}
             handleDayClick={this.handleDayClick}
             handleEventClick={this.handleEventClick}
-            events={this.state.events}
+            events={events}
           />
         ) : null}
-        {this.state.view === DAY_VIEW ? (
+        {view === DAY_VIEW ? (
           <CalendarDayView
-            view={this.state.view}
+            view={view}
             nextDay={this.nextDay}
-            currentDate={this.state.currentDate}
+            currentDate={currentDate}
             previousDay={this.previousDay}
             handleDayClick={this.handleDayClick}
             handleEventClick={this.handleEventClick}
-            events={this.state.events}
+            events={events}
           />
         ) : null}
         <AddEventModal
-          selectedDate={this.state.selectedDate}
-          showAddModal={this.state.showAddModal}
+          selectedDate={selectedDate}
+          showAddModal={showAddModal}
           toggleAddModal={this.toggleAddModal}
           getAllEvents={this.getAllEvents}
         />
         <EditEventModal
-          editEvent={this.state.editEvent}
+          editEvent={editEvent}
           getAllEvents={this.getAllEvents}
-          showEditModal={this.state.showEditModal}
+          showEditModal={showEditModal}
           toggleEditEventModal={this.toggleEditEventModal}
         />
       </div>
