@@ -35,25 +35,37 @@ class EditEventModal extends React.Component {
   editEvent() {
     let event = this.state;
     let id = this.state._id;
-    axios
-      .put(`/events/${id}`, event)
-      .then(res => {
-        this.setState(
-          {
-            start_date: "",
-            end_date: "",
-            description: "",
-            _id: ""
-          },
-          () => {
-            this.props.getAllEvents();
-            this.props.toggleEditEventModal();
-          }
-        );
-      })
-      .catch(err => {
-        console.error("Error Saving Event", err);
-      });
+
+    if (
+      event.start_date &&
+      event.end_date &&
+      event.description !== "" &&
+      moment(event.start_date).isSameOrBefore(event.end_date)
+    ) {
+      axios
+        .put(`/events/${id}`, event)
+        .then(res => {
+          this.setState(
+            {
+              start_date: "",
+              end_date: "",
+              description: "",
+              _id: ""
+            },
+            () => {
+              this.props.getAllEvents();
+              this.props.toggleEditEventModal();
+            }
+          );
+        })
+        .catch(err => {
+          console.error("Error Saving Event", err);
+        });
+    } else if (event.description === "") {
+      alert("Description is required!");
+    } else if (moment(event.end_date).isBefore(event.start_date)) {
+      alert("Event end date cannot be before the start date");
+    }
   }
 
   deleteEvent() {
@@ -121,7 +133,7 @@ class EditEventModal extends React.Component {
               />
             </div>
             <button type="button" onClick={this.editEvent}>
-              Edit Event
+              Save Event
             </button>
             <button type="button" onClick={this.deleteEvent}>
               Delete Event

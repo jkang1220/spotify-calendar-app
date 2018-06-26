@@ -7,10 +7,12 @@ const Day = props => {
     <div
       className={props.day !== "" ? "day-item" : "blank-day-item "}
       onClick={() => {
-        let date = moment(props.currentDate)
-          .date(props.day)
-          .toDate();
-        props.handleDayClick(date);
+        if (props.day !== "") {
+          let date = moment(props.currentDate)
+            .date(props.day)
+            .toDate();
+          props.handleDayClick(date);
+        }
       }}
     >
       {props.day}

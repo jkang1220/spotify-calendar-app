@@ -12,9 +12,9 @@ const Event = props => (
     <p>
       {props.event.description}
       <br />
-      Start: {moment(props.event.start_date).format(" DD-MMM-YYYY h:mm A")}
+      Start: {moment(props.event.start_date).format("MM/DD/YY h:mm A")}
       <br />
-      End: {moment(props.event.end_date).format("DD-MMM-YYYY h:mm A")}
+      End: {moment(props.event.end_date).format("MM/DD/YY h:mm A")}
     </p>
   </div>
 );

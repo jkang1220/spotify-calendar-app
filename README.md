@@ -16,6 +16,9 @@ A calendar app for challenge 2 of the 2018 NYC Spotify Fellowship application
 10. Days with too many events will automatically have a scrollbar in it.
 11. The user can update and delete events by clicking on an event and then seleting the update or delete buttons.
 12. The UI should has 5 rows of 7 boxes with the correct date on the correct days.
+13. The UI will alert the user and not save/update the event if:
+    a. The event date is before the end start date
+    b. The event description is empty
 
 ## Installation
 

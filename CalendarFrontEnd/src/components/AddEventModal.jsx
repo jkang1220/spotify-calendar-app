@@ -41,7 +41,12 @@ class AddEventModal extends React.Component {
 
   addEvent(e) {
     let event = this.state;
-    if (event.start_date && event.start_date && event.description !== "") {
+    if (
+      event.start_date &&
+      event.end_date &&
+      event.description !== "" &&
+      moment(event.start_date).isSameOrBefore(event.end_date)
+    ) {
       axios
         .post("/events", event)
         .then(res => {
@@ -60,10 +65,10 @@ class AddEventModal extends React.Component {
         .catch(err => {
           console.error("Error Saving Event", err);
         });
-    } else {
-      alert(
-        "Please make sure you have entered a Start Date, End Date, and Description!"
-      );
+    } else if (event.description === "") {
+      alert("Description is required!");
+    } else if (moment(event.end_date).isBefore(event.start_date)) {
+      alert("Event end date cannot be before the start date");
     }
   }
 
