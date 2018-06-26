@@ -1,7 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var events = require("../db/models/event.js");
-
+const APP_PORT = process.env.PORT || 3000;
 var app = express();
 
 app.use(bodyParser.json());
@@ -37,6 +37,6 @@ app.put("/events/:id", function(req, res) {
   res.sendStatus(200);
 });
 
-app.listen(3000, function() {
-  console.log("listening on port 3000!");
+app.listen(APP_PORT, function() {
+  console.log(`listening on port ${APP_PORT}!`);
 });
