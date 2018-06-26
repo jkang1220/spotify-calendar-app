@@ -1,3 +1,13 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
 body {
   font-family: "Kanit", sans-serif;
   background-color: black;
@@ -8,11 +18,15 @@ body {
 button {
   background-color: #5ac758;
   color: white;
+  width: 50%;
+  margin: 5px;
+  font-size: 1rem;
 }
 
 .container {
-  width: 80%;
-  margin: auto;
+  width: 90%;
+  height: 100%;
+  margin: 0 auto;
 }
 
 /* STYLING FOR MONTH CALENDAR */
@@ -25,14 +39,20 @@ button {
 /* STYLING FOR EACH DAY */
 .day-item {
   border: 2px solid white;
-  background-color: rgb(88, 88, 88);
+  background-color: rgb(68, 68, 68);
   font-size: 1.5rem;
-  height: 8rem;
+  height: 10rem;
+  overflow: auto;
+}
+
+.day-item:hover {
+  border: 2px solid white;
+  background-color: #5ac758;
 }
 
 .blank-day-item {
   border: 2px solid white;
-  height: 8rem;
+  height: 10rem;
 }
 
 /* STYLING FOR WEEKDAY HEADER(SUNDAY, MONDAY, ETC) */
@@ -69,4 +89,38 @@ button {
 /* STYLING FOR DAY HEADER - DAY VIEW */
 .header-day {
   margin: 0 auto;
+}
+
+/* STYLING FOR EVENT  */
+.event {
+  background-color: rgb(160, 160, 160);
+  border: 1px solid black;
+  width: 95%;
+  font-size: 15px;
+  margin: 5px 5px;
+}
+
+.modal {
+  height: auto;
+  width: auto;
+  position: absolute;
+  top: 25%;
+  right: 35%;
+  background-color: black;
+  padding: 5%;
+}
+
+.form-container {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-item {
+  font-size: 1.5rem;
+}
+
+.input-field {
+  font-size: 1rem;
 }

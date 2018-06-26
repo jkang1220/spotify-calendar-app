@@ -6,6 +6,7 @@ import CalendarMonthView from "./components/CalendarMonthView.jsx";
 import CalendarWeekView from "./components/CalendarWeekView.jsx";
 import CalendarDayView from "./components/CalendarDayView.jsx";
 import ViewOptionRadial from "./components/ViewOptionRadial.jsx";
+import EditEventModal from "./components/EditEventModal.jsx";
 
 import moment from "moment";
 import { MONTH_VIEW, WEEK_VIEW, DAY_VIEW } from "../../constants.js";
@@ -13,23 +14,36 @@ import { MONTH_VIEW, WEEK_VIEW, DAY_VIEW } from "../../constants.js";
 class App extends React.Component {
   constructor(props) {
     super(props);
-    // let today = new Date();
     this.state = {
       events: [],
+      showAddModal: false,
+      showEditModal: false,
       view: MONTH_VIEW,
-      currentDate: moment().toDate()
+      currentDate: moment().toDate(),
+      selectedDate: {
+        start_date: "",
+        end_date: "",
+        description: ""
+      },
+      editEvent: {
+        start_date: "",
+        end_date: "",
+        description: "",
+        _id: ""
+      }
     };
-    // currMonth: today.getMonth(),
-    // currDay: today.getDate(),
-    // currYear: today.getFullYear()
     this.updateView = this.updateView.bind(this);
     this.toggleAddModal = this.toggleAddModal.bind(this);
+    this.toggleEditEventModal = this.toggleEditEventModal.bind(this);
     this.nextMonth = this.nextMonth.bind(this);
     this.previousMonth = this.previousMonth.bind(this);
     this.nextDay = this.nextDay.bind(this);
     this.previousDay = this.previousDay.bind(this);
     this.nextWeek = this.nextWeek.bind(this);
     this.previousWeek = this.previousWeek.bind(this);
+    this.handleDayClick = this.handleDayClick.bind(this);
+    this.handleEventClick = this.handleEventClick.bind(this);
+    this.getAllEvents = this.getAllEvents.bind(this);
   }
 
   //get all events when component mounts
@@ -43,7 +57,7 @@ class App extends React.Component {
       .get("/events")
       .then(res => {
         this.setState({ events: res.data }, () => {
-          console.log("events Fetched:", this.state.events);
+          console.log("successfully fetched events", res.data);
         });
       })
       .catch(err => {
@@ -128,8 +142,35 @@ class App extends React.Component {
     });
   }
 
+  handleDayClick(day) {
+    this.setState(
+      prevState => {
+        return {
+          selectedDate: {
+            start_date: moment(day).toDate(),
+            end_date: moment(day).toDate(),
+            description: ""
+          }
+        };
+      },
+      () => {
+        this.toggleAddModal();
+      }
+    );
+  }
+
+  handleEventClick(event) {
+    this.setState({ editEvent: event }, () => {
+      this.toggleEditEventModal();
+    });
+  }
+
+  toggleEditEventModal() {
+    let temp = this.state.showEditModal;
+    this.setState({ showEditModal: !temp });
+  }
+
   render() {
-    console.log("APP WAS RE-RENDERED", this.state);
     return (
       <div className="container">
         <div>
@@ -145,6 +186,9 @@ class App extends React.Component {
             currentDate={this.state.currentDate}
             nextMonth={this.nextMonth}
             previousMonth={this.previousMonth}
+            handleDayClick={this.handleDayClick}
+            handleEventClick={this.handleEventClick}
+            events={this.state.events}
           />
         ) : null}
         {this.state.view === WEEK_VIEW ? (
@@ -153,6 +197,9 @@ class App extends React.Component {
             nextWeek={this.nextWeek}
             currentDate={this.state.currentDate}
             previousWeek={this.previousWeek}
+            handleDayClick={this.handleDayClick}
+            handleEventClick={this.handleEventClick}
+            events={this.state.events}
           />
         ) : null}
         {this.state.view === DAY_VIEW ? (
@@ -161,12 +208,23 @@ class App extends React.Component {
             nextDay={this.nextDay}
             currentDate={this.state.currentDate}
             previousDay={this.previousDay}
+            handleDayClick={this.handleDayClick}
+            handleEventClick={this.handleEventClick}
+            events={this.state.events}
           />
         ) : null}
-        {/* <AddEventModal
+        <AddEventModal
+          selectedDate={this.state.selectedDate}
           showAddModal={this.state.showAddModal}
           toggleAddModal={this.toggleAddModal}
-        /> */}
+          getAllEvents={this.getAllEvents}
+        />
+        <EditEventModal
+          editEvent={this.state.editEvent}
+          getAllEvents={this.getAllEvents}
+          showEditModal={this.state.showEditModal}
+          toggleEditEventModal={this.toggleEditEventModal}
+        />
       </div>
     );
   }

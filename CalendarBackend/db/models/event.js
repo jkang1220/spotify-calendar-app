@@ -28,15 +28,15 @@ var createEvent = event => {
 };
 
 var updateEvent = (id, updatedEvent) => {
-  return findById(id).then(doc => {
-    doc.set(updatedEvent);
-    return doc.save();
+  return Event.findOne({ _id: id }).then(event => {
+    event.set(updatedEvent);
+    return event.save();
   });
 };
 
 var deleteEvent = id => {
-  return findById(id).then(doc => {
-    return doc.remove();
+  return Event.findOne({ _id: id }).then(event => {
+    return event.remove();
   });
 };
 

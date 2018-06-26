@@ -5,7 +5,6 @@ import CalendarHeader from "./CalendarHeader.jsx";
 import Day from "./Day.jsx";
 
 function generateCalendar(props) {
-  console.log("props recieved in generateCalendar", props);
   let calendarArr = [];
   let daysInMonth = moment(props.currentDate).daysInMonth();
 
@@ -21,6 +20,23 @@ function generateCalendar(props) {
     calendarArr.push(j);
   }
   return calendarArr;
+}
+
+function filterEventsByDay(events, currentMonth, currentDate, currentYear) {
+  return events.filter(events => {
+    let eventStartMonth = moment(events.start_date).month();
+    let eventStartYear = moment(events.start_date).year();
+    let eventStartDate = moment(events.start_date).date();
+    let eventEndMonth = moment(events.end_date).month();
+    let eventEndYear = moment(events.end_date).year();
+    let eventEndDate = moment(events.end_date).date();
+    return (
+      currentYear >= eventStartYear &&
+      currentYear <= eventEndYear &&
+      (currentMonth >= eventStartMonth && currentMonth <= eventEndMonth) &&
+      (currentDate >= eventStartDate && currentDate <= eventEndDate)
+    );
+  });
 }
 
 class CalendarMonthView extends React.Component {
@@ -47,7 +63,21 @@ class CalendarMonthView extends React.Component {
         <WeekDayHeader view={this.props.view} />
         <div className="container-month">
           {this.state.calendarArr.map((day, i) => {
-            return <Day key={i} day={day} />;
+            return (
+              <Day
+                handleDayClick={this.props.handleDayClick}
+                currentDate={this.props.currentDate}
+                key={i}
+                day={day}
+                handleEventClick={this.props.handleEventClick}
+                events={filterEventsByDay(
+                  this.props.events,
+                  moment(this.props.currentDate).month(),
+                  day,
+                  moment(this.props.currentDate).year()
+                )}
+              />
+            );
           })}
         </div>
         <div />

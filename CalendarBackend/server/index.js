@@ -12,7 +12,6 @@ app.get("/events", function(req, res) {
   events
     .getAllEvents()
     .then(data => {
-      console.log("res after getting events", data);
       res.send(data).status();
     })
     .catch(err => {
@@ -22,17 +21,20 @@ app.get("/events", function(req, res) {
 });
 app.post("/events", function(req, res) {
   events.createEvent(req.body);
+  res.sendStatus(200);
 });
 
-app.delete("/events:id", function(req, res) {
+app.delete("/events/:id", function(req, res) {
   let eventId = req.params.id;
   events.deleteEvent(eventId);
+  res.sendStatus(200);
 });
 
-app.put("/events:id", function(req, res) {
+app.put("/events/:id", function(req, res) {
   let eventId = req.params.id;
   let updatedEvent = req.body;
   events.updateEvent(eventId, updatedEvent);
+  res.sendStatus(200);
 });
 
 app.listen(3000, function() {

@@ -4,6 +4,7 @@
   "description": "## Installation",
   "main": "index.js",
   "scripts": {
+    "start": "npm i && webpack -d && node CalendarBackend/server/index.js",
     "react-dev": "webpack -d --watch",
     "server-dev": "nodemon CalendarBackend/server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -32,6 +33,7 @@
     "express": "^4.16.3",
     "moment": "^2.22.2",
     "mongoose": "^5.1.6",
+    "nodemon": "^1.17.5",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-modal": "^3.4.5"
